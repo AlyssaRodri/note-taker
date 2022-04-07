@@ -2,6 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const uuid = require("uuid");
 const path = require("path");
+const { text } = require("express");
 
 
 const app = express();
@@ -24,19 +25,30 @@ app.get("/notes", (req, res) => {
 });
 //get request for our API
 app.get("/api/notes", (req, res) =>{
-  res.sendFile(path.join(__dirname, "Develop/ds/db.json"))
+  res.sendFile(path.join(__dirname, "db/db.json"))
 })
 
 
 // Post request
 app.post("/api/notes", (res, req) =>{
   console.log("app.post for api/notes")
-  let toParse = fs.readFileSync("./Develop/db/db.json")
-  let dataBase = JSON.parse(toParse)
-  dataBase.push({ id: uuid.v4(), ...req.body })
 
-  fs.writeFileSync("Develop/db/db.json", JSON.stringify(dataBase))
-  res.send(req.params.id)
+  let newNote = {
+    title: res.body.title,
+    text: res.body.text,
+    id: uuid.v4()
+  };
+
+  console.log(newNote)
+
+  let dataBase = fs.readFileSync("./db/db.json")
+  let parsedDB = JSON.parse(dataBase)
+
+  parsedDB.push(newNote);
+  console.log(parsedDB)
+
+  fs.writeFileSync("db/db.json", JSON.stringify(parsedDB))
+  return req.json(newNote)
 
 })
 // Delete (optional)
