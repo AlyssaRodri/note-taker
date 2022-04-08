@@ -25,7 +25,7 @@ app.get("/notes", (req, res) => {
 });
 //get request for our API
 app.get("/api/notes", (req, res) =>{
-  res.sendFile(path.join(__dirname, "Develop/db/db.json"))
+  res.sendFile(path.join(__dirname, "db/db.json"))
 })
 
 
@@ -41,13 +41,13 @@ app.post("/api/notes", (res, req) =>{
 
   console.log(newNote)
 
-  let dataBase = fs.readFileSync("./Develop/db/db.json")
+  let dataBase = fs.readFileSync("./db/db.json")
   let parsedDB = JSON.parse(dataBase)
 
   parsedDB.push(newNote);
   console.log(parsedDB)
 
-  fs.writeFileSync("Develop/db/db.json", JSON.stringify(parsedDB))
+  fs.writeFileSync("db/db.json", JSON.stringify(parsedDB))
   return req.json(newNote)
 
 })
